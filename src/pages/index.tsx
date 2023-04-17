@@ -9,7 +9,7 @@ export default function Home() {
   const [messege, setMessege] = useState('');
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/')
+    fetch('https://burupuro-character.azurewebsites.net/')
       .then((res) => res.text())
       .then((data) => setMessege(data));
   }, []);
