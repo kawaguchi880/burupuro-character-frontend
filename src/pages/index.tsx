@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import PostFile from '../features/postfile/components/postfile';
 
 export async function getServerSideProps() {
   const data = JSON.stringify({ time: new Date() });
@@ -9,7 +10,7 @@ export default function Home() {
   const [messege, setMessege] = useState('');
 
   useEffect(() => {
-    fetch('https://burupuro-character.azurewebsites.net/')
+    fetch('http://127.0.0.1:5000')
       .then((res) => res.text())
       .then((data) => setMessege(data));
   }, []);
@@ -17,7 +18,7 @@ export default function Home() {
   return (
     <div>
       <h1>Next.js + Flask!!</h1>
-      <p>{messege}</p>
+      <PostFile />
     </div>
   );
 }

@@ -9,3 +9,6 @@ npm run lint
 npm run lint:fix
 npm run format
 ```
+
+ファイル構成はこれを参考に
+https://zenn.dev/yodaka/articles/eca2d4bf552aeb
