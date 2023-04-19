@@ -1,42 +1,39 @@
-import React, { ChangeEvent } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import FormData from 'form-data';
 
-// 画像ファイルを送信する関数
-async function sendImageFile(imageFile: File) {
-  // form-dataを作成
-  const formData = new FormData();
-  formData.append('image', imageFile);
+type Props = {};
 
-  try {
-    // axiosを使用してPOSTリクエストを送信
-    const response = await axios.post('/api/upload', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    // レスポンスを処理
-    console.log('画像のアップロードに成功しました。', response.data);
-  } catch (error) {
-    // エラーを処理
-    console.error('画像のアップロードに失敗しました。', error);
-  }
-}
+const PostFile: React.FC<Props> = () => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-// 画像ファイルを選択して送信するコンポーネント
-export default function PostFile() {
-  // ファイルの変更を監視するハンドラ
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const imageFile = event.target.files && event.target.files[0];
-    if (imageFile) {
-      sendImageFile(imageFile);
+  const fileSelectedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      setSelectedFile(event.target.files[0]);
+    }
+  };
+
+  const sendImageFile = async () => {
+    if (!selectedFile) return;
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+
+    try {
+      const res = await axios.post('http://127.0.0.1:5000/api/upload', formData);
+      console.log('response: ', res.data);
+    } catch (error) {
+      console.error('Failed to upload file.', error);
     }
   };
 
   return (
-    <div>
-      <h1>画像ファイルのアップロード</h1>
-      <input type='file' id='imageInput' onChange={handleFileChange} />
-    </div>
+    <>
+      <input type='file' onChange={fileSelectedHandler} />
+      <div>
+        <button onClick={sendImageFile}>送信する</button>
+      </div>
+    </>
   );
-}
+};
+
+export default PostFile;
